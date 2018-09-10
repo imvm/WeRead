@@ -11,6 +11,7 @@ import UIKit
 class Feed: NSObject {
     var name: String? = nil
     var entries: [Entry]? = nil
+    var favorite: Bool = false
 }
 
 class Entry: NSObject {
@@ -19,6 +20,7 @@ class Entry: NSObject {
     let link: String?
     let thumbnailLink: String?
     var image: UIImage?
+    var favorite: Bool = false
     
     init(title: String?, description: String?, link: String?, thumbnailLink: String?) {
         self.title = title
@@ -176,6 +178,34 @@ class MasterViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "showDetail", sender: self)
+    }
+    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        // Get current state from data source
+        //guard let favorite = dataSource?.favorite(at: indexPath) else {
+        //    return nil
+        //}
+        
+        guard let favorite = feed?.entries?[indexPath.row].favorite else {
+            return nil
+        }
+        
+        let title = favorite ?
+            NSLocalizedString("Unfavorite", comment: "Unfavorite") :
+            NSLocalizedString("Favorite", comment: "Favorite")
+        
+        let action = UIContextualAction(style: .normal, title: title,
+                                        handler: { (action, view, completionHandler) in
+                                            // Update data source when user taps action
+                                            self.feed?.entries?[indexPath.row].favorite = !favorite
+                                            //self.dataSource?.setFavorite(!favorite, at: indexPath)
+                                            completionHandler(true)
+        })
+        
+        action.image = UIImage(named: "heart")
+        action.backgroundColor = favorite ? .red : .green
+        let configuration = UISwipeActionsConfiguration(actions: [action])
+        return configuration
     }
 
 
