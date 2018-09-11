@@ -21,10 +21,10 @@ class UserStore: NSObject {
                     if let secondDate = $1.date {
                         return firstDate < secondDate
                     } else {
-                        return true
+                        return false
                     }
                 }
-                return false
+                return true
             })
     }
     
