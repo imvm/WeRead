@@ -16,8 +16,10 @@ class Entry: NSObject {
     let date: Date?
     var image: UIImage?
     var favorite: Bool = false
+    weak var feed: Feed!
     
-    init(title: String?, description: String?, link: String?, thumbnailLink: String?, date: Date?) {
+    init(feed: Feed, title: String?, description: String?, link: String?, thumbnailLink: String?, date: Date?) {
+        self.feed = feed
         self.title = title
         self.summary = description
         self.link = link

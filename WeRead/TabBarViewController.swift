@@ -16,6 +16,17 @@ class TabBarViewController: UITabBarController {
         // Do any additional setup after loading the view.
     }
     
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        if let newsController = self.selectedViewController as? NewsFeedViewController {
+            DispatchQueue.global(qos: .background).async {
+                newsController.loadFeeds {
+                    newsController.tableView.reloadData()
+                }
+            }
+        } else if let tableViewController = self.selectedViewController as? UITableViewController {
+            tableViewController.tableView.reloadData()
+        }
+    }
 
     /*
     // MARK: - Navigation

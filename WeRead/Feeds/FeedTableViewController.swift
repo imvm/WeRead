@@ -12,6 +12,8 @@ class FeedTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = true
 
         self.title = "Feeds"
         
@@ -31,7 +33,9 @@ class FeedTableViewController: UITableViewController {
         let alertController = UIAlertController(title: "Add new feed", message: nil, preferredStyle: .alert)
         
         alertController.addTextField { textField in
-            return
+            if let pasteboardString = UIPasteboard.general.string, pasteboardString.contains("rss") || pasteboardString.contains("xml") || pasteboardString.contains("json") {
+                textField.text = pasteboardString
+            }
         }
         //We add buttons to the alert controller by creating UIAlertActions:
         let actionOk = UIAlertAction(title: "OK", style: .default) { (action) in
@@ -39,7 +43,10 @@ class FeedTableViewController: UITableViewController {
             self.addURL(urlString)
         }
         
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
         alertController.addAction(actionOk)
+        alertController.addAction(cancelAction)
         
         self.present(alertController, animated: true, completion: nil)
     }

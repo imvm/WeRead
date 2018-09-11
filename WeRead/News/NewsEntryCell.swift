@@ -15,6 +15,11 @@ class NewsEntryCell: UITableViewCell {
     
     @IBOutlet weak var descriptionTextView: UITextView!
     
+    @IBOutlet weak var saveButton: UIButton!
+    
+    @IBOutlet weak var shareButton: UIButton!
+    
+    @IBOutlet weak var pubDateLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

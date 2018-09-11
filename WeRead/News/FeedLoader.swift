@@ -35,7 +35,7 @@ class FeedLoader: NSObject {
                 let link = entry.content?.value
                 let thumbnailLink = entry.media?.mediaThumbnails?.first?.value
                 let date = entry.updated
-                return Entry(title: title, description: description, link: link, thumbnailLink: thumbnailLink, date: date)
+                return Entry(feed: myFeed, title: title, description: description, link: link, thumbnailLink: thumbnailLink, date: date)
             })
             
         // Really Simple Syndication Feed Model
@@ -58,7 +58,7 @@ class FeedLoader: NSObject {
                 
                 let date = entry.pubDate
                 
-                return Entry(title: title, description: description, link: link, thumbnailLink: thumbnailLink, date: date)
+                return Entry(feed: myFeed, title: title, description: description, link: link, thumbnailLink: thumbnailLink, date: date)
             })
             
         // JSON Feed Model
@@ -71,7 +71,7 @@ class FeedLoader: NSObject {
                 let link = item.url
                 let thumbnailLink = item.image
                 let date = item.datePublished
-                return Entry(title: title, description: description, link: link, thumbnailLink: thumbnailLink, date: date)
+                return Entry(feed: myFeed, title: title, description: description, link: link, thumbnailLink: thumbnailLink, date: date)
             })
             
         case let .failure(error):
