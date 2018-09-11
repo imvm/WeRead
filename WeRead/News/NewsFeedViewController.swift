@@ -8,36 +8,28 @@
 
 import UIKit
 
-class Feed: NSObject {
-    var name: String? = nil
-    var entries: [Entry]? = nil
-    var favorite: Bool = false
-}
-
-class Entry: NSObject {
-    let title: String?
-    let summary: String?
-    let link: String?
-    let thumbnailLink: String?
-    var image: UIImage?
-    var favorite: Bool = false
+class NewsFeedViewController: UITableViewController {
     
-    init(title: String?, description: String?, link: String?, thumbnailLink: String?) {
-        self.title = title
-        self.summary = description
-        self.link = link
-        self.thumbnailLink = thumbnailLink
+    var entries: [Entry] {
+        return UserStore.shared.feeds
+        .compactMap{ $0.entries }
+            .flatMap { $0 }.sorted(by: { (entryA, entryB) -> Bool in
+                if let firstDate = entryA.date {
+                    if let secondDate = entryB.date {
+                        return firstDate < secondDate
+                    } else {
+                        return true
+                    }
+                } else {
+                    return false
+                }
+            })
     }
-}
-
-class MasterViewController: UITableViewController {
-
-    var detailViewController: DetailViewController? = nil
-    var feed: Feed?
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         DispatchQueue.global(qos: .background).async {
-            self.loadFeed {
+            self.loadFeeds {
+                self.tableView.reloadData()
                 refreshControl.endRefreshing()
             }
         }
@@ -46,47 +38,43 @@ class MasterViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "News"
+        
         tableView.register(UINib(nibName: "NewsEntryCell", bundle: nil), forCellReuseIdentifier: "NewsEntryCell")
         
         self.refreshControl = UIRefreshControl()
-        self.refreshControl!.addTarget(self, action: #selector(MasterViewController.handleRefresh(_:)), for: UIControl.Event.valueChanged)
+        self.refreshControl!.addTarget(self, action: #selector(NewsFeedViewController.handleRefresh(_:)), for: UIControl.Event.valueChanged)
         
         DispatchQueue.global(qos: .background).async {
-            self.loadFeed {
-                self.title = self.feed?.name
+            self.loadFeeds {
                 self.tableView.reloadData()
             }
         }
         
         // Do any additional setup after loading the view, typically from a nib.
-        navigationItem.leftBarButtonItem = editButtonItem
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(LoginViewController.logout))
 
         //let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         //navigationItem.rightBarButtonItem = addButton
-        
-        if let split = splitViewController {
-            let controllers = split.viewControllers
-            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+
+    }
+    
+    func loadFeeds(completion: @escaping () -> ()) {
+        for feed in UserStore.shared.feeds {
+            loadFeed(feed, completion)
         }
     }
     
-    func loadFeed(completion: @escaping () -> ()) {
-        FeedLoader.loadFeed(feed: "https://www.nasa.gov/rss/dyn/breaking_news.rss") { (result, error) in
+    func loadFeed(_ feed: Feed, _ completion: @escaping () -> ()) {
+        FeedLoader.loadFeed(feed) { (result, error) in
             guard error == nil else {
                 fatalError(error.debugDescription)
             }
-            
-            self.feed = result
             
             DispatchQueue.main.async {
                 completion()
             }
         }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-        super.viewWillAppear(animated)
     }
 
     @objc
@@ -101,11 +89,9 @@ class MasterViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
-                let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
+                let controller = segue.destination as! WebViewViewController
                 
-                guard let entry = feed?.entries?[indexPath.row] else {
-                    fatalError()
-                }
+                let entry = entries[indexPath.row]
                 
                 controller.title = entry.title
                 controller.detailItem = entry.link
@@ -127,15 +113,18 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return feed?.entries?.count ?? 0
+        
+        let entries = UserStore.shared.feeds
+            .compactMap{ $0.entries }
+            .flatMap { $0 }
+        
+        return entries.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsEntryCell", for: indexPath) as! NewsEntryCell
 
-        guard let entry = feed?.entries?[indexPath.row] else {
-            fatalError()
-        }
+        let entry = entries[indexPath.row]
 
         cell.title!.text = entry.title
         cell.descriptionTextView.text = entry.summary
@@ -166,15 +155,6 @@ class MasterViewController: UITableViewController {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            feed?.entries?.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-        }
-    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "showDetail", sender: self)
@@ -186,9 +166,7 @@ class MasterViewController: UITableViewController {
         //    return nil
         //}
         
-        guard let favorite = feed?.entries?[indexPath.row].favorite else {
-            return nil
-        }
+        let favorite = entries[indexPath.row].favorite
         
         let title = favorite ?
             NSLocalizedString("Unfavorite", comment: "Unfavorite") :
@@ -197,7 +175,8 @@ class MasterViewController: UITableViewController {
         let action = UIContextualAction(style: .normal, title: title,
                                         handler: { (action, view, completionHandler) in
                                             // Update data source when user taps action
-                                            self.feed?.entries?[indexPath.row].favorite = !favorite
+                                            self.entries[indexPath.row].favorite = !favorite
+                                            
                                             //self.dataSource?.setFavorite(!favorite, at: indexPath)
                                             completionHandler(true)
         })

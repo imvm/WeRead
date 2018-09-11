@@ -10,7 +10,7 @@ import UIKit
 import FeedKit
 
 class FeedLoader: NSObject {
-    static func loadFeed(feed: String, completionHandler: @escaping (Feed?, Error?) -> Void) {
+    static func loadFeed(_ myFeed: Feed, completionHandler: @escaping (Feed?, Error?) -> Void) {
         //RSS Feed examples
         //https://www.nasa.gov/rss/dyn/breaking_news.rss
         //http://rss.cnn.com/rss/cnn_topstories.rss
@@ -19,9 +19,8 @@ class FeedLoader: NSObject {
         //TODO: PARSING ERROR!!!
         //http://www.washingtonpost.com/rss/
         
-        let feedURL = URL(string: feed)!
+        let feedURL = URL(string: myFeed.url!)!
         let parser = FeedParser(URL: feedURL) // or FeedParser(data: data) or FeedParser(xmlStream: stream)
-        let myFeed = Feed()
         
         let result = parser.parse()
         
@@ -35,7 +34,8 @@ class FeedLoader: NSObject {
                 let description = entry.summary?.value ?? "No description"
                 let link = entry.content?.value
                 let thumbnailLink = entry.media?.mediaThumbnails?.first?.value
-                return Entry(title: title, description: description, link: link, thumbnailLink: thumbnailLink)
+                let date = entry.updated
+                return Entry(title: title, description: description, link: link, thumbnailLink: thumbnailLink, date: date)
             })
             
         // Really Simple Syndication Feed Model
@@ -56,7 +56,9 @@ class FeedLoader: NSObject {
                     thumbnailLink = entry.media?.mediaContents?.first?.attributes?.url
                 }
                 
-                return Entry(title: title, description: description, link: link, thumbnailLink: thumbnailLink)
+                let date = entry.pubDate
+                
+                return Entry(title: title, description: description, link: link, thumbnailLink: thumbnailLink, date: date)
             })
             
         // JSON Feed Model
@@ -68,7 +70,8 @@ class FeedLoader: NSObject {
                 let description = item.summary ?? "No description"
                 let link = item.url
                 let thumbnailLink = item.image
-                return Entry(title: title, description: description, link: link, thumbnailLink: thumbnailLink)
+                let date = item.datePublished
+                return Entry(title: title, description: description, link: link, thumbnailLink: thumbnailLink, date: date)
             })
             
         case let .failure(error):
