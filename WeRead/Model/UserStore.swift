@@ -19,12 +19,12 @@ class UserStore: NSObject {
             .sorted(by: {
                 if let firstDate = $0.date {
                     if let secondDate = $1.date {
-                        return firstDate < secondDate
+                        return firstDate > secondDate
                     } else {
-                        return false
+                        return true
                     }
                 }
-                return true
+                return false
             })
     }
     
