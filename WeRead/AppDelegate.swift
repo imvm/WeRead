@@ -8,6 +8,12 @@
 
 import UIKit
 
+struct WeDeployConfig {
+    
+    static let authUrl = "https://auth-weread.wedeploy.io"
+    static let dataUrl = "https://data-weread.wedeploy.io"
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

@@ -33,11 +33,15 @@ class WebViewViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.hidesBottomBarWhenPushed = true
 
         // Do any additional setup after loading the view, typically from a nib.
         edgesForExtendedLayout = []
         configureView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController!.navigationBar.prefersLargeTitles = false
+        self.navigationController!.navigationBar.isTranslucent = false
     }
 
     var detailItem: String? {

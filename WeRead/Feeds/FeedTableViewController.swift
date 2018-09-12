@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WeDeploy
 
 class FeedTableViewController: UITableViewController {
 
@@ -19,7 +20,7 @@ class FeedTableViewController: UITableViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(FeedTableViewController.showAddFeedAlert))
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(LoginViewController.logout))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(FeedTableViewController.logout))
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -28,6 +29,11 @@ class FeedTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    @objc func logout() {
+        WeDeployAPIClient.shared.logout {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
     
     @objc func showAddFeedAlert() {
         let alertController = UIAlertController(title: "Add new feed", message: nil, preferredStyle: .alert)

@@ -82,7 +82,6 @@ class NewsFeedViewController: UITableViewController {
         }
         
         // Do any additional setup after loading the view, typically from a nib.
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(LoginViewController.logout))
 
         //let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         //navigationItem.rightBarButtonItem = addButton

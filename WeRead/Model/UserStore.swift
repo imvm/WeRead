@@ -10,6 +10,7 @@ import UIKit
 
 class UserStore: NSObject {
     static let shared = UserStore()
+    
     var feeds = [Feed]()
     
     var entries: [Entry] {
