@@ -12,22 +12,10 @@ class TabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+        self.delegate = self
     }
     
-    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        if let newsController = self.selectedViewController as? NewsFeedViewController {
-            DispatchQueue.global(qos: .background).async {
-                newsController.loadFeeds {
-                    newsController.tableView.reloadData()
-                }
-            }
-        } else if let tableViewController = self.selectedViewController as? UITableViewController {
-            tableViewController.tableView.reloadData()
-        }
-    }
-
     /*
     // MARK: - Navigation
 
@@ -38,4 +26,21 @@ class TabBarViewController: UITabBarController {
     }
     */
 
+}
+
+extension TabBarViewController: UITabBarControllerDelegate {
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if let newsController = viewController.children.first as? NewsFeedViewController {
+            DispatchQueue.global(qos: .background).async {
+                newsController.loadFeeds {
+                    DispatchQueue.main.async {
+                        newsController.tableView.reloadData()
+                    }
+                }
+            }
+        } else if let tableViewController = self.selectedViewController as? UITableViewController {
+            tableViewController.tableView.reloadData()
+        }
+    }
 }

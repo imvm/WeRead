@@ -6,7 +6,6 @@
 //  Copyright © 2018 Ian. All rights reserved.
 //
 
-import Foundation
 import WeDeploy
 
 class WeDeployAPIClient {
@@ -15,27 +14,68 @@ class WeDeployAPIClient {
     var userAuth: Auth?
     var user: User?
     
-    func login() {
+    let authURL = "https://auth-weread.wedeploy.io"
+    let dataURL = "https://data-weread.wedeploy.io"
+    
+    //TODO: Better error handling
+    
+    func login(loginText: String, passwordText: String, callback: @escaping (Bool) -> ()) {
         guard userAuth == nil else {
-            return
+            fatalError()
         }
         
-        
+        WeDeploy.auth(authURL)
+        .signInWith(username: loginText, password: passwordText)
+        .then { auth -> Void in
+            WeDeployAPIClient.shared.userAuth = auth
+            callback(true)
+        } .catch { _ in
+            callback(false)
+        }
+    }
+    
+    func getCurrentUser(callback: @escaping (Bool) -> ()) {
+        WeDeploy.auth(authURL, authorization: WeDeployAPIClient.shared.userAuth)
+        .getCurrentUser()
+        .then { user -> Void in
+            WeDeployAPIClient.shared.user = user
+            callback(true)
+        }
+        .catch{ _ in
+            callback(false)
+        }
     }
     
     func logout(callback: @escaping () -> ()) {
         guard  WeDeployAPIClient.shared.userAuth != nil else {
-            print(userAuth)
-            return
+            fatalError()
         }
         
-        WeDeploy.auth("https://auth-weread.wedeploy.io", authorization: userAuth)
+        WeDeploy.auth(authURL, authorization: userAuth)
             .signOut()
         
         WeDeployAPIClient.shared.userAuth = nil
         WeDeployAPIClient.shared.user = nil
         
         callback()
+    }
+    
+    func createUser(emailText: String, nameText: String, passwordText: String, callback: @escaping (Bool) -> ()) {
+        WeDeploy.auth(authURL)
+        .createUser(email: emailText, password: passwordText, name: nameText)
+        .toCallback { auth, error in
+            if let _ = auth {
+                callback(true)
+            }
+            else {
+                callback(false)
+            }
+        }
+    }
+    
+    func resetPassword(emailText: String, callback: @escaping (Bool) -> ()) {
+        //TODO: implement reset password api call
+        callback(true)
     }
     
     func addFeed() {

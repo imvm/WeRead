@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Feed: NSObject {
+class Feed: NSObject, Codable {
     var url: String? = nil
     var name: String? = nil
     var entries: [Entry]? = nil

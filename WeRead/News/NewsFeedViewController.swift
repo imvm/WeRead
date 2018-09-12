@@ -46,7 +46,9 @@ class NewsFeedViewController: UITableViewController {
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         DispatchQueue.global(qos: .background).async {
             self.loadFeeds {
-                self.tableView.reloadData()
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
                 refreshControl.endRefreshing()
             }
         }
@@ -77,7 +79,9 @@ class NewsFeedViewController: UITableViewController {
         
         DispatchQueue.global(qos: .background).async {
             self.loadFeeds {
-                self.tableView.reloadData()
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
         
@@ -89,6 +93,10 @@ class NewsFeedViewController: UITableViewController {
     }
     
     func loadFeeds(completion: @escaping () -> ()) {
+        if UserStore.shared.feeds.count == 0 {
+            completion()
+        }
+        
         for feed in UserStore.shared.feeds {
             loadFeed(feed, completion)
         }
@@ -182,6 +190,7 @@ class NewsFeedViewController: UITableViewController {
             cell.pubDateLabel.text = dateFormatter.string(from: date)
         }
         
+        /*
         if entry.image != nil {
             cell.entryImage.image = entry.image
         } else {
@@ -192,7 +201,7 @@ class NewsFeedViewController: UITableViewController {
                     
                         DispatchQueue.main.async {
                             cell.entryImage.image = thumbnailImage
-                            entry.image = thumbnailImage
+                            //entry.image = thumbnailImage
                         }
                     } catch {
                         print("error loading enclosure image")
@@ -200,6 +209,7 @@ class NewsFeedViewController: UITableViewController {
                 }
             }
         }
+        */
         
         return cell
     }
@@ -231,11 +241,11 @@ class NewsFeedViewController: UITableViewController {
             entry = UserStore.shared.entries[sender.tag]
         }
         
-        guard let title = entry.title, let image = entry.image, let summary = entry.summary, let shareLink = entry.link, let shareURL = URL(string: shareLink) else {
+        guard let title = entry.title, /*let image = entry.image,*/ let summary = entry.summary, let shareLink = entry.link, let shareURL = URL(string: shareLink) else {
             return
         }
         
-        let vc = UIActivityViewController(activityItems: [title, summary, image,  shareURL], applicationActivities: [])
+        let vc = UIActivityViewController(activityItems: [title, summary, /*image,*/  shareURL], applicationActivities: [])
         present(vc, animated: true)
     }
 

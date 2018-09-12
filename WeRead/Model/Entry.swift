@@ -8,13 +8,12 @@
 
 import UIKit
 
-class Entry: NSObject {
+class Entry: NSObject, Codable {
     let title: String?
     let summary: String?
     let link: String?
     let thumbnailLink: String?
     let date: Date?
-    var image: UIImage?
     var favorite: Bool = false
     weak var feed: Feed!
     

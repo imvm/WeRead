@@ -1,4 +1,5 @@
 PODS:
+  - Cache (5.1.0)
   - FeedKit (8.0.0)
   - PromiseKit (4.5.2):
     - PromiseKit/Foundation (= 4.5.2)
@@ -21,11 +22,13 @@ PODS:
     - Socket.IO-Client-Swift (~> 12.1)
 
 DEPENDENCIES:
+  - Cache
   - FeedKit (~> 8.0)
   - WeDeploy
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Cache
     - FeedKit
     - PromiseKit
     - RxSwift
@@ -34,6 +37,7 @@ SPEC REPOS:
     - WeDeploy
 
 SPEC CHECKSUMS:
+  Cache: 7737c595aae7d94c7c0feca2c887288624e3b07e
   FeedKit: 4a78f07adf7f0a224b904014678f1de82a7ffc21
   PromiseKit: 743e497a5f505a470d3bbbf4ce0663c1268af0a4
   RxSwift: 99e10317ddfcc7fbe01356aafd118fde4a0be104
@@ -41,6 +45,6 @@ SPEC CHECKSUMS:
   Starscream: 142bd8ef24592d985daee9fa48c936070b85b15f
   WeDeploy: f1359e5efa88c6de4d25e4ff0fa31b0f7bbf53c9
 
-PODFILE CHECKSUM: a3579e9dba8c306283716721ee608beb0e931441
+PODFILE CHECKSUM: c1117081a048e424857fb6f3e3c4df420d1f3c41
 
 COCOAPODS: 1.5.3
