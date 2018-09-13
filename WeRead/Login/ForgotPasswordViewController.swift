@@ -13,6 +13,16 @@ class ForgotPasswordViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var resetPasswordButton: UIButton!
     
+    let textFieldDelegate = TextFieldDelegate()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
+        
+        emailTextField.delegate = textFieldDelegate
+        emailTextField.tag = 0
+    }
+    
     @IBAction func sendPasswordResetEmail(_ sender: Any) {
         guard let emailText = emailTextField.text else {
             return

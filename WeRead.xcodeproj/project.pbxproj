@@ -21,6 +21,10 @@
 		2B8098E02142DB4800FCC743 /* NewsEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2B8098DF2142DB4800FCC743 /* NewsEntryCell.xib */; };
 		2BA9FB3E214871E80058DA27 /* WeDeployAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA9FB3D214871E80058DA27 /* WeDeployAPIClient.swift */; };
 		2BA9FB422148B4850058DA27 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA9FB412148B4850058DA27 /* ForgotPasswordViewController.swift */; };
+		2BA9FB4D2149C14E0058DA27 /* LogoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2BA9FB4C2149C14E0058DA27 /* LogoView.xib */; };
+		2BA9FB4F2149C4D70058DA27 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA9FB4E2149C4D70058DA27 /* LogoView.swift */; };
+		2BA9FB512149FB8B0058DA27 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA9FB502149FB8B0058DA27 /* UIViewController+Extensions.swift */; };
+		2BA9FB532149FF710058DA27 /* TextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA9FB522149FF710058DA27 /* TextFieldDelegate.swift */; };
 		2BAFEB202141D2BD00F12452 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAFEB1F2141D2BD00F12452 /* AppDelegate.swift */; };
 		2BAFEB222141D2BD00F12452 /* NewsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAFEB212141D2BD00F12452 /* NewsFeedViewController.swift */; };
 		2BAFEB242141D2BD00F12452 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAFEB232141D2BD00F12452 /* WebViewViewController.swift */; };
@@ -65,6 +69,10 @@
 		2B8098DF2142DB4800FCC743 /* NewsEntryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsEntryCell.xib; sourceTree = "<group>"; };
 		2BA9FB3D214871E80058DA27 /* WeDeployAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeDeployAPIClient.swift; sourceTree = "<group>"; };
 		2BA9FB412148B4850058DA27 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		2BA9FB4C2149C14E0058DA27 /* LogoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogoView.xib; sourceTree = "<group>"; };
+		2BA9FB4E2149C4D70058DA27 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
+		2BA9FB502149FB8B0058DA27 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		2BA9FB522149FF710058DA27 /* TextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldDelegate.swift; sourceTree = "<group>"; };
 		2BAFEB1C2141D2BD00F12452 /* WeRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BAFEB1F2141D2BD00F12452 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2BAFEB212141D2BD00F12452 /* NewsFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedViewController.swift; sourceTree = "<group>"; };
@@ -146,6 +154,7 @@
 		2BA9FB4B2148E1DB0058DA27 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				2BA9FB502149FB8B0058DA27 /* UIViewController+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -188,6 +197,8 @@
 				2BAFEB282141D2C000F12452 /* Assets.xcassets */,
 				2BAFEB2A2141D2C000F12452 /* LaunchScreen.storyboard */,
 				2BAFEB2D2141D2C000F12452 /* Info.plist */,
+				2BA9FB4C2149C14E0058DA27 /* LogoView.xib */,
+				2BA9FB4E2149C4D70058DA27 /* LogoView.swift */,
 			);
 			path = WeRead;
 			sourceTree = "<group>";
@@ -217,6 +228,7 @@
 				2B2DE3FA21475D5500310F7E /* LoginViewController.swift */,
 				2B2DE3FC21475D6900310F7E /* CreateAccountViewController.swift */,
 				2BA9FB412148B4850058DA27 /* ForgotPasswordViewController.swift */,
+				2BA9FB522149FF710058DA27 /* TextFieldDelegate.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -376,6 +388,7 @@
 				2BAFEB292141D2C000F12452 /* Assets.xcassets in Resources */,
 				2B0D2D442143934700C93C83 /* Login.storyboard in Resources */,
 				2BAFEB272141D2BD00F12452 /* Main.storyboard in Resources */,
+				2BA9FB4D2149C14E0058DA27 /* LogoView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,13 +520,16 @@
 				2B2DE3FD21475D6900310F7E /* CreateAccountViewController.swift in Sources */,
 				2B2DE3FB21475D5500310F7E /* LoginViewController.swift in Sources */,
 				2BAFEB242141D2BD00F12452 /* WebViewViewController.swift in Sources */,
+				2BA9FB532149FF710058DA27 /* TextFieldDelegate.swift in Sources */,
 				2B8098D92142D8C300FCC743 /* NewsEntryCell.swift in Sources */,
 				2B2DE400214760C800310F7E /* Feed.swift in Sources */,
 				2BAFEB222141D2BD00F12452 /* NewsFeedViewController.swift in Sources */,
 				2BA9FB3E214871E80058DA27 /* WeDeployAPIClient.swift in Sources */,
 				2BA9FB422148B4850058DA27 /* ForgotPasswordViewController.swift in Sources */,
 				2B2DE3F621475CCE00310F7E /* FeedTableViewController.swift in Sources */,
+				2BA9FB4F2149C4D70058DA27 /* LogoView.swift in Sources */,
 				2B0D2D3F21437F2E00C93C83 /* FeedLoader.swift in Sources */,
+				2BA9FB512149FB8B0058DA27 /* UIViewController+Extensions.swift in Sources */,
 				2BCD188A2143A28000227424 /* TabBarViewController.swift in Sources */,
 				2BAFEB202141D2BD00F12452 /* AppDelegate.swift in Sources */,
 				2B2DE40421476F7100310F7E /* UserStore.swift in Sources */,

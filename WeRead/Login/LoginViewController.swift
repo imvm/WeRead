@@ -17,6 +17,19 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var loginButton: UIButton!
     
+    let textFieldDelegate = TextFieldDelegate()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
+        
+        loginTextField.delegate = textFieldDelegate
+        loginTextField.tag = 0
+        
+        passwordTextField.delegate = textFieldDelegate
+        passwordTextField.tag = 1
+    }
+    
     @IBAction func login(_ sender: Any) {
         
         loginButton.isEnabled = false
@@ -36,3 +49,4 @@ class LoginViewController: UIViewController {
     }
 
 }
+
