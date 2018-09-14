@@ -22,7 +22,7 @@ class FeedTableViewController: UITableViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(FeedTableViewController.showAddFeedAlert))
         
-        if WeDeployAPIClient.shared.user != nil {
+        if WeDeployAPIClient.shared.userAuth != nil {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(FeedTableViewController.logout))
         } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Login", style: .plain, target: self, action: #selector(FeedTableViewController.goToLogin))

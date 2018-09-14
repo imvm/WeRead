@@ -162,12 +162,12 @@
 			path = Feeds;
 			sourceTree = "<group>";
 		};
-		2BA9FB3B21485BCF0058DA27 /* WeDeployAPIClient */ = {
+		2BA9FB3B21485BCF0058DA27 /* WeDeploy */ = {
 			isa = PBXGroup;
 			children = (
 				2BA9FB3D214871E80058DA27 /* WeDeployAPIClient.swift */,
 			);
-			path = WeDeployAPIClient;
+			path = WeDeploy;
 			sourceTree = "<group>";
 		};
 		2BA9FB4B2148E1DB0058DA27 /* Extensions */ = {
@@ -208,7 +208,7 @@
 				2BF56D1B214B076F00121012 /* Data */,
 				2BA9FB54214A031C0058DA27 /* WeRead.entitlements */,
 				2BA9FB4B2148E1DB0058DA27 /* Extensions */,
-				2BA9FB3B21485BCF0058DA27 /* WeDeployAPIClient */,
+				2BA9FB3B21485BCF0058DA27 /* WeDeploy */,
 				2BF56D1A214B075500121012 /* Main */,
 				2BAFEB4F2142266E00F12452 /* Login */,
 				2BAFEB1F2141D2BD00F12452 /* AppDelegate.swift */,

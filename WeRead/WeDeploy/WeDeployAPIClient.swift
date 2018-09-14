@@ -73,7 +73,7 @@ class WeDeployAPIClient {
         .createUser(email: emailText, password: passwordText, name: nameText)
         .toCallback { auth, error in
             if let _ = auth {
-                print("created acccount")
+                print("created account")
                 print(auth)
                 callback(true)
             }
@@ -87,8 +87,15 @@ class WeDeployAPIClient {
     }
     
     func resetPassword(emailText: String, callback: @escaping (Bool) -> ()) {
-        //TODO: implement reset password api call
-        callback(false)
+        WeDeploy.auth(authURL, authorization: userAuth)
+        .sendPasswordReset(email: emailText)
+        .then {
+            callback(true)
+        }
+        .catch { _ in
+            callback(false)
+        }
+
     }
     
     func addFeed() {
