@@ -24,6 +24,8 @@ class NewsFeedViewController: UITableViewController {
             group = UserStore.shared.groups.first!
         }
         
+        configureSearchController()
+        
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.title = NSLocalizedString("News", comment: "")
 

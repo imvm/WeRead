@@ -37,8 +37,8 @@ class ForgotPasswordViewController: UIViewController {
                 self.dismiss(animated: false, completion: nil)
             } else {
                 self.alertFailedAccountPasswordReset()
-                self.resetPasswordButton.isEnabled = true
             }
+            self.resetPasswordButton.isEnabled = true
         }
     }
     

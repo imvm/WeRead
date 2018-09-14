@@ -87,7 +87,7 @@ class WeDeployAPIClient {
     }
     
     func resetPassword(emailText: String, callback: @escaping (Bool) -> ()) {
-        WeDeploy.auth(authURL, authorization: userAuth)
+        WeDeploy.auth(authURL)
         .sendPasswordReset(email: emailText)
         .then {
             callback(true)

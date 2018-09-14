@@ -43,8 +43,8 @@ class LoginViewController: UIViewController {
                 self.performSegue(withIdentifier: "toMain", sender: nil)
             } else {
                 self.alertFailedLogin()
-                self.loginButton.isEnabled = true
             }
+            self.loginButton.isEnabled = true
         }
         
     }

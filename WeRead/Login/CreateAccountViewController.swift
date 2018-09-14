@@ -48,8 +48,8 @@ class CreateAccountViewController: UIViewController {
                 self.dismiss(animated: false, completion: nil)
             } else {
                 self.alertFailedAccountCreation()
-                self.createAccountButton.isEnabled = true
             }
+            self.createAccountButton.isEnabled = true
         }
         
     }
