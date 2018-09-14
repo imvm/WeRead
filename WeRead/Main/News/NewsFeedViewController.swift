@@ -11,55 +11,32 @@ import UIKit
 class NewsFeedViewController: UITableViewController {
     
     var filteredEntries = [Entry]()
-    
-    // MARK: - Private instance methods
-    
-    func searchBarIsEmpty() -> Bool {
-        // Returns true if the text is empty or nil
-        return searchController.searchBar.text?.isEmpty ?? true
-    }
-    
-    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
-        filteredEntries = UserStore.shared.entries.filter({( entry : Entry) -> Bool in
-            let doesCategoryMatch = (scope == "All") || (scope == "Favorites" && entry.favorite)
-            
-            if searchBarIsEmpty() {
-                return doesCategoryMatch
-            } else {
-                let stringInTitle = entry.title?.lowercased().contains(searchText.lowercased())
-                
-                let stringInSummary = entry.summary?.lowercased().contains(searchText.lowercased())
-                
-                return doesCategoryMatch && (stringInTitle ?? false || stringInSummary ?? false)
-            }
-        })
-        tableView.reloadData()
-    }
-    
-    func isFiltering() -> Bool {
-        let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
-        return searchController.isActive && (!searchBarIsEmpty() || searchBarScopeIsFiltering)
-    }
+    var group: FeedGroup!
     
     let searchController = UISearchController(searchResultsController: nil)
     
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        DispatchQueue.global(qos: .background).async {
-            self.loadFeeds {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-                refreshControl.endRefreshing()
-            }
-        }
-    }
+    // MARK: - Private instance methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+        if group == nil {
+            group = UserStore.shared.groups.first!
+        }
         
-        // Setup the Search Controller
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.title = NSLocalizedString("News", comment: "")
+
+        tableView.register(UINib(nibName: "NewsEntryCell", bundle: nil), forCellReuseIdentifier: "NewsEntryCell")
+        
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl!.addTarget(self, action: #selector(NewsFeedViewController.handleRefresh(_:)), for: UIControl.Event.valueChanged)
+        
+        refreshFeeds()
+
+    }
+    
+    func configureSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search News"
@@ -69,35 +46,31 @@ class NewsFeedViewController: UITableViewController {
         // Setup the Scope Bar
         searchController.searchBar.scopeButtonTitles = ["All", "Favorites"]
         searchController.searchBar.delegate = self
-        
-        self.title = "News"
-        
-        tableView.register(UINib(nibName: "NewsEntryCell", bundle: nil), forCellReuseIdentifier: "NewsEntryCell")
-        
-        self.refreshControl = UIRefreshControl()
-        self.refreshControl!.addTarget(self, action: #selector(NewsFeedViewController.handleRefresh(_:)), for: UIControl.Event.valueChanged)
-        
+    }
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        if !refreshControl.isRefreshing {
+            refreshFeeds()
+        }
+    }
+    
+    func refreshFeeds() {
         DispatchQueue.global(qos: .background).async {
             self.loadFeeds {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+                self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
             }
         }
-        
-        // Do any additional setup after loading the view, typically from a nib.
-
-        //let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-        //navigationItem.rightBarButtonItem = addButton
-
     }
     
     func loadFeeds(completion: @escaping () -> ()) {
-        if UserStore.shared.feeds.count == 0 {
-            completion()
+        if group.feeds.count == 0 {
+            DispatchQueue.main.async {
+                completion()
+            }
         }
         
-        for feed in UserStore.shared.feeds {
+        for feed in group.feeds {
             loadFeed(feed, completion)
         }
     }
@@ -114,17 +87,10 @@ class NewsFeedViewController: UITableViewController {
         }
     }
 
-    @objc
-    func insertNewObject(_ sender: Any) {
-        //entries.insert(NSDate(), at: 0)
-        //let indexPath = IndexPath(row: 0, section: 0)
-        //tableView.insertRows(at: [indexPath], with: .automatic)
-    }
-
     // MARK: - Segues
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetail" {
+        if segue.identifier == "showWebView" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let controller = segue.destination as! WebViewViewController
                 
@@ -132,7 +98,7 @@ class NewsFeedViewController: UITableViewController {
                 if isFiltering() {
                     entry = filteredEntries[indexPath.row]
                 } else {
-                    entry = UserStore.shared.entries[indexPath.row]
+                    entry = group.entries[indexPath.row]
                 }
                 
                 //controller.title = entry.title
@@ -160,7 +126,7 @@ class NewsFeedViewController: UITableViewController {
             return filteredEntries.count
         }
         
-        return UserStore.shared.entries.count
+        return group.entries.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -178,7 +144,7 @@ class NewsFeedViewController: UITableViewController {
         if isFiltering() {
             entry = filteredEntries[indexPath.row]
         } else {
-            entry = UserStore.shared.entries[indexPath.row]
+            entry = group.entries[indexPath.row]
         }
 
         cell.title!.text = entry.title
@@ -190,27 +156,6 @@ class NewsFeedViewController: UITableViewController {
             cell.pubDateLabel.text = dateFormatter.string(from: date)
         }
         
-        /*
-        if entry.image != nil {
-            cell.entryImage.image = entry.image
-        } else {
-            if let thumbnailLink = entry.thumbnailLink, let thumbnailURL = URL(string: thumbnailLink) {
-                DispatchQueue.global(qos: .background).async {
-                    do {
-                        let thumbnailImage =  try UIImage(data: Data(contentsOf: thumbnailURL))
-                    
-                        DispatchQueue.main.async {
-                            cell.entryImage.image = thumbnailImage
-                            //entry.image = thumbnailImage
-                        }
-                    } catch {
-                        print("error loading enclosure image")
-                    }
-                }
-            }
-        }
-        */
-        
         return cell
     }
     
@@ -219,7 +164,7 @@ class NewsFeedViewController: UITableViewController {
         if isFiltering() {
             entry = filteredEntries[sender.tag]
         } else {
-            entry = UserStore.shared.entries[sender.tag]
+            entry = group.entries[sender.tag]
         }
         
         entry.favorite = !entry.favorite
@@ -238,7 +183,7 @@ class NewsFeedViewController: UITableViewController {
         if isFiltering() {
             entry = filteredEntries[sender.tag]
         } else {
-            entry = UserStore.shared.entries[sender.tag]
+            entry = group.entries[sender.tag]
         }
         
         guard let title = entry.title, /*let image = entry.image,*/ let summary = entry.summary, let shareLink = entry.link, let shareURL = URL(string: shareLink) else {
@@ -248,44 +193,38 @@ class NewsFeedViewController: UITableViewController {
         let vc = UIActivityViewController(activityItems: [title, summary, /*image,*/  shareURL], applicationActivities: [])
         present(vc, animated: true)
     }
-
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "showDetail", sender: self)
+        performSegue(withIdentifier: "showWebView", sender: self)
     }
-    /*
-    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        // Get current state from data source
-        //guard let favorite = dataSource?.favorite(at: indexPath) else {
-        //    return nil
-        //}
-        
-        let favorite = UserStore.shared.entries[indexPath.row].favorite
-        
-        let title = favorite ?
-            NSLocalizedString("Unfavorite", comment: "Unfavorite") :
-            NSLocalizedString("Favorite", comment: "Favorite")
-        
-        let action = UIContextualAction(style: .normal, title: title,
-                                        handler: { (action, view, completionHandler) in
-                                            // Update data source when user taps action
-                                            UserStore.shared.entries[indexPath.row].favorite = !favorite
-                                            
-                                            //self.dataSource?.setFavorite(!favorite, at: indexPath)
-                                            completionHandler(true)
+    
+    func searchBarIsEmpty() -> Bool {
+        // Returns true if the text is empty or nil
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+        filteredEntries = group.entries.filter({( entry : Entry) -> Bool in
+            let doesCategoryMatch = (scope == "All") || (scope == "Favorites" && entry.favorite)
+            
+            if searchBarIsEmpty() {
+                return doesCategoryMatch
+            } else {
+                let stringInTitle = entry.title?.lowercased().contains(searchText.lowercased())
+                
+                let stringInSummary = entry.summary?.lowercased().contains(searchText.lowercased())
+                
+                return doesCategoryMatch && (stringInTitle ?? false || stringInSummary ?? false)
+            }
         })
-        
-        action.image = UIImage(named: "heart")
-        action.backgroundColor = favorite ? .red : .green
-        let configuration = UISwipeActionsConfiguration(actions: [action])
-        return configuration
+        tableView.reloadData()
     }
-
-     */
+    
+    func isFiltering() -> Bool {
+        let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
+        return searchController.isActive && (!searchBarIsEmpty() || searchBarScopeIsFiltering)
+    }
+    
 }
 
 extension NewsFeedViewController: UISearchResultsUpdating {

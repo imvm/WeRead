@@ -1,0 +1,12 @@
+
+/* Class = "UINavigationController"; title = "Feeds"; ObjectID = "AIJ-vg-rHg"; */
+"AIJ-vg-rHg.title" = "Feeds";
+
+/* Class = "UINavigationController"; title = "News"; ObjectID = "E04-0n-V8v"; */
+"E04-0n-V8v.title" = "Notícias";
+
+/* Class = "UITabBarItem"; title = "News"; ObjectID = "LjR-K8-VT0"; */
+"LjR-K8-VT0.title" = "Notícias";
+
+/* Class = "UITabBarItem"; title = "Feeds"; ObjectID = "w5h-9C-59x"; */
+"w5h-9C-59x.title" = "Feeds";

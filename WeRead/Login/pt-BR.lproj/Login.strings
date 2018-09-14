@@ -1,0 +1,49 @@
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "2mH-dx-X5j"; */
+"2mH-dx-X5j.placeholder" = "Email";
+
+/* Class = "UIButton"; normalTitle = "Nevermind"; ObjectID = "4DM-Nc-9yL"; */
+"4DM-Nc-9yL.normalTitle" = "Voltar";
+
+/* Class = "UIButton"; normalTitle = "Reset"; ObjectID = "8nU-OZ-ipY"; */
+"8nU-OZ-ipY.normalTitle" = "Resetar";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "DTy-Hl-dIW"; */
+"DTy-Hl-dIW.placeholder" = "Email";
+
+/* Class = "UITextField"; text = "ian_manor@hotmail.com"; ObjectID = "DTy-Hl-dIW"; */
+"DTy-Hl-dIW.text" = "ian_manor@hotmail.com";
+
+/* Class = "UIButton"; normalTitle = "Nevermind"; ObjectID = "Dvv-OZ-Ubv"; */
+"Dvv-OZ-Ubv.normalTitle" = "Voltar";
+
+/* Class = "UIButton"; normalTitle = "Create"; ObjectID = "Izp-Ss-38W"; */
+"Izp-Ss-38W.normalTitle" = "Criar";
+
+/* Class = "UITextField"; placeholder = "Username"; ObjectID = "L6q-KR-qAE"; */
+"L6q-KR-qAE.placeholder" = "Username";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "abd-VS-r1a"; */
+"abd-VS-r1a.placeholder" = "Email";
+
+/* Class = "UIButton"; normalTitle = "Forgot your password?"; ObjectID = "cPs-Ln-xBf"; */
+"cPs-Ln-xBf.normalTitle" = "Esqueceu sua senha?";
+
+/* Class = "UIButton"; normalTitle = "Don't have an account? Sign up!"; ObjectID = "dNz-jO-5Uj"; */
+"dNz-jO-5Uj.normalTitle" = "Não tem uma conta? Faça uma!";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "dVj-qG-iZ9"; */
+"dVj-qG-iZ9.placeholder" = "Senha";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "gra-Hg-HK9"; */
+"gra-Hg-HK9.normalTitle" = "Login";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "koC-Oc-OKl"; */
+"koC-Oc-OKl.placeholder" = "Senha";
+
+/* Class = "UITextField"; text = "ian"; ObjectID = "koC-Oc-OKl"; */
+"koC-Oc-OKl.text" = "ian";
+
+"jrg-ii-ANH.text" = "ou";
+
+"kiD-SB-BZc.normalTitle" = "Entrar sem uma conta";

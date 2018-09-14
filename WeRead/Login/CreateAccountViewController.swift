@@ -30,6 +30,8 @@ class CreateAccountViewController: UIViewController {
         
         passwordTextField.delegate = textFieldDelegate
         passwordTextField.tag = 2
+        
+        createAccountButton.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
     @IBAction func createAccount(_ sender: Any) {
@@ -45,7 +47,8 @@ class CreateAccountViewController: UIViewController {
             if isSuccessful {
                 self.dismiss(animated: false, completion: nil)
             } else {
-                self.createAccountButton.isEnabled = false
+                self.alertFailedAccountCreation()
+                self.createAccountButton.isEnabled = true
             }
         }
         
@@ -55,4 +58,9 @@ class CreateAccountViewController: UIViewController {
         self.dismiss(animated: false, completion: nil)
     }
 
+    func alertFailedAccountCreation() {
+        let alert = UIAlertController(title: NSLocalizedString("Failed", comment: ""), message: "Could not create account :(", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 }

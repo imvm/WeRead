@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  WeRead
+
+  Created by Ian Manor on 13/09/18.
+  Copyright © 2018 Ian. All rights reserved.
+*/
+
+"News" = "Notícias";
+"Favorites" = "Favoritos";
+"Failed" = "Falha";
+"Could not log in :(" = "Login não pôde ser feito :(";
+"Could not create account :(" = "Conta não pôde ser criada :(";
+"Could not send reset email :(" = "Email não encontrado :(";
+"Add new feed URL" = "Adicione URL de nova feed";
+"Cancel" = "Cancelar";

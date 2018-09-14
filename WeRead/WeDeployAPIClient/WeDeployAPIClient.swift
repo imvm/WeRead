@@ -14,8 +14,8 @@ class WeDeployAPIClient {
     var userAuth: Auth?
     var user: User?
     
-    let authURL = "https://auth-weread.wedeploy.io"
-    let dataURL = "https://data-weread.wedeploy.io"
+    let authURL = "https://auth-weread.lfr.io"
+    let dataURL = "https://data-weread.lfr.io"
     
     //TODO: Better error handling
     
@@ -23,13 +23,20 @@ class WeDeployAPIClient {
         guard userAuth == nil else {
             fatalError()
         }
+        print(authURL)
         
         WeDeploy.auth(authURL)
         .signInWith(username: loginText, password: passwordText)
         .then { auth -> Void in
             WeDeployAPIClient.shared.userAuth = auth
             callback(true)
-        } .catch { _ in
+        } .catch { error in
+            if let error = error as? WeDeployError {
+                print(error.errors)
+                print(error.code)
+                print(error.message)
+            }
+            
             callback(false)
         }
     }
@@ -48,11 +55,12 @@ class WeDeployAPIClient {
     
     func logout(callback: @escaping () -> ()) {
         guard  WeDeployAPIClient.shared.userAuth != nil else {
-            fatalError()
+            callback()
+            return
         }
         
         WeDeploy.auth(authURL, authorization: userAuth)
-            .signOut()
+        .signOut()
         
         WeDeployAPIClient.shared.userAuth = nil
         WeDeployAPIClient.shared.user = nil
@@ -65,9 +73,14 @@ class WeDeployAPIClient {
         .createUser(email: emailText, password: passwordText, name: nameText)
         .toCallback { auth, error in
             if let _ = auth {
+                print("created acccount")
+                print(auth)
                 callback(true)
             }
-            else {
+            else if let error = error as? WeDeployError {
+                print(error.errors)
+                print(error.code)
+                print(error.message)
                 callback(false)
             }
         }
@@ -75,15 +88,15 @@ class WeDeployAPIClient {
     
     func resetPassword(emailText: String, callback: @escaping (Bool) -> ()) {
         //TODO: implement reset password api call
-        callback(true)
+        callback(false)
     }
     
     func addFeed() {
-        
+       //WeDeploy.data(dataURL, authorization: auth).post
     }
     
     func getFeeds() {
-        
+        //WeDeploy.data(dataURL, authorization: auth).get
     }
     
 }

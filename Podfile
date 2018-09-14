@@ -8,7 +8,6 @@ target 'WeRead' do
   # Pods for WeRead
    pod 'FeedKit', '~> 8.0'
    pod 'WeDeploy'
-   pod 'Cache'
 
   target 'WeReadTests' do
     inherit! :search_paths

@@ -7,12 +7,7 @@
 //
 
 import UIKit
-
-struct WeDeployConfig {
-    
-    static let authUrl = "https://auth-weread.wedeploy.io"
-    static let dataUrl = "https://data-weread.wedeploy.io"
-}
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +16,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        UIApplication.shared.setMinimumBackgroundFetchInterval(
+            UIApplication.backgroundFetchIntervalNever)
+        
+        let center =  UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { (result, error) in
+            //handle result of request failure
+        }
+        
+        NotificationSender.sendNewsNotification(numberOfNewItems: 4, groups: ["Technology", "Culture"])
+        
         return true
     }
 
@@ -44,6 +50,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    // Support for background fetch
+    func application(
+        _ application: UIApplication,
+        performFetchWithCompletionHandler
+        completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        //1
+        if let splitViewController = window?.rootViewController as? UISplitViewController {
+
+            //2
+            for viewController in splitViewController.viewControllers {
+                if let fetchViewController = viewController.children.first as? NewsFeedViewController {
+                    //3
+                    fetchViewController.loadFeeds {
+                        //4
+                        NotificationSender.sendNewsNotification(numberOfNewItems: 1, groups: [fetchViewController.group.name])
+                        fetchViewController.tableView.reloadData()
+                        completionHandler(.newData)
+                    }
+                }
+            }
+        }
     }
 
     

@@ -21,6 +21,8 @@ class ForgotPasswordViewController: UIViewController {
         
         emailTextField.delegate = textFieldDelegate
         emailTextField.tag = 0
+        
+        resetPasswordButton.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
     @IBAction func sendPasswordResetEmail(_ sender: Any) {
@@ -34,6 +36,7 @@ class ForgotPasswordViewController: UIViewController {
             if isSuccessful {
                 self.dismiss(animated: false, completion: nil)
             } else {
+                self.alertFailedAccountPasswordReset()
                 self.resetPasswordButton.isEnabled = true
             }
         }
@@ -41,6 +44,12 @@ class ForgotPasswordViewController: UIViewController {
     
     @IBAction func cancel(_ sender: Any) {
         self.dismiss(animated: false, completion: nil)
+    }
+    
+    func alertFailedAccountPasswordReset() {
+        let alert = UIAlertController(title: NSLocalizedString("Failed", comment: ""), message: NSLocalizedString("Could not send reset email :(", comment: ""), preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 
 }

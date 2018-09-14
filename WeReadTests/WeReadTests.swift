@@ -22,6 +22,12 @@ class WeReadTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let arrayWithDuplicates = [5, 1, 2, 3 , 4, 1, 1, 1, 2, 5]
+        let arrayWithoutDuplicates = [1, 2, 3, 4, 5]
+        
+        let arrayRemovingDuplicates = arrayWithDuplicates.removingDuplicates()
+        
+        XCTAssertEqual(arrayRemovingDuplicates.sorted(), arrayWithoutDuplicates.sorted())
     }
 
     func testPerformanceExample() {

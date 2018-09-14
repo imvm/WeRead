@@ -7,7 +7,25 @@
 		<key>WeRead.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>10</integer>
+			<integer>9</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>2BAFEB1B2141D2BD00F12452</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2BAFEB312141D2C000F12452</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2BAFEB3C2141D2C100F12452</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
